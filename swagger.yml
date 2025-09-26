@@ -1,0 +1,2574 @@
+---
+swagger: "2.0"
+info:
+  description: "WebRobot API with Business subscription type"
+  version: "1.0.0"
+  title: "WebRobot API (Business)"
+host: "rgodb61otb.execute-api.eu-west-2.amazonaws.com"
+basePath: "/test"
+schemes:
+  - "https"
+paths:
+  /webrobot/api/bots/{projectId}:
+    get:
+      operationId: "get_all_bots"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListBots"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/bots/{projectId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    post:
+      operationId: "create_bot"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Bot"
+          required: true
+          schema:
+            $ref: "#/definitions/Bot"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Bot"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/bots/{projectId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    put:
+      operationId: "update_bot"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Bot"
+          required: true
+          schema:
+            $ref: "#/definitions/Bot"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Bot"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "PUT"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/bots/{projectId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/bots/{projectId}/id/{botId}:
+    get:
+      operationId: "get bot from id"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Bot"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/bots/id/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botId: "method.request.path.botId"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    delete:
+      operationId: "delete_bot"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/bots/id/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botId: "method.request.path.botId"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/bots/{projectId}/{botName}:
+    get:
+      operationId: "get bot from name"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botName"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Bot"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/bots/{botName}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botName: "method.request.path.botName"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}:
+    post:
+      operationId: "create_concept"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Concept"
+          required: true
+          schema:
+            $ref: "#/definitions/Concept"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Concept"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/id/{conceptId}/type/{typeAttribute}:
+    get:
+      operationId: "get_concept_from_id"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "typeAttribute"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Concept"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/id/{conceptId}/type/{typeAttribute}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/name/{conceptName}/type/{typeAttribute}:
+    get:
+      operationId: "get_concept_from_name"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptName"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "typeAttribute"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Concept"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/name/{conceptName}/type/{typeAttribute}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/type/{typeAttribute}:
+    get:
+      operationId: "get_all_concepts"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "typeAttribute"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListConcepts"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/type/{typeAttribute}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}:
+    put:
+      operationId: "update_concept"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Concept"
+          required: true
+          schema:
+            $ref: "#/definitions/Concept"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Concept"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    delete:
+      operationId: "delete_concept"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes:
+    post:
+      operationId: "add_attributes"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ConceptAttribute"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    put:
+      operationId: "update_attribute"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ConceptAttribute"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "PUT"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/id/{attributeId}:
+    get:
+      operationId: "get_attribute_from_id"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "attributeId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ConceptAttribute"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/id/{attributeId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/name/{attributeName}:
+    get:
+      operationId: "get_concept_attribute_from_name"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "attributeName"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ConceptAttribute"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/name/{attributeName}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/type/{typeAttribute}:
+    get:
+      operationId: "get_all_attributes"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "typeAttribute"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListAttributes"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/type/{typeAttribute}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/{attributeId}:
+    delete:
+      operationId: "delete_attribute"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "attributeId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/attributes/{attributeId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages:
+    get:
+      operationId: "get_all_pages"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListPages"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    post:
+      operationId: "create_page"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Project"
+          required: true
+          schema:
+            $ref: "#/definitions/Page"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Page"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    put:
+      operationId: "update_page"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Project"
+          required: true
+          schema:
+            $ref: "#/definitions/Page"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Page"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "PUT"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages/id/{pageId}:
+    get:
+      operationId: "get_page_from_id"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "pageId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Page"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages/id/{pageId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages/url/{pageUrl}:
+    get:
+      operationId: "get_attribute_from_page"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "pageUrl"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/PageAttribute"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages/url/{pageUrl}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages/{pageId}:
+    delete:
+      operationId: "delete_page_from_id"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "pageId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/pages/{pageId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/concepts/{projectId}/{botId}/{conceptId}/{pageId}/attributes/name/{attributeName}:
+    get:
+      operationId: "get_attribute_from_name"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "pageId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "attributeName"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "conceptId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/PageAttribute"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/concepts/{projectId}/{botId}/{conceptId}/{pageId}/attributes/name/{attributeName}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}:
+    get:
+      operationId: "get_dataset"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Dataset"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    put:
+      operationId: "update_job"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Job"
+          required: true
+          schema:
+            $ref: "#/definitions/Job"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Job"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "PUT"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    delete:
+      operationId: "delete dataset from id"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Dataset"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/input:
+    get:
+      operationId: "get_dataset_input_file"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/input"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/input/size:
+    get:
+      operationId: "get_dataset_input_size"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/DatasetSize"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/input/size"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/input/{offset}/{limit}:
+    get:
+      operationId: "get_dataset_input_file_pagination"
+      parameters:
+        - name: "limit"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "offset"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListRecords"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/input/{offset}/{limit}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/status:
+    get:
+      operationId: "get_dataset_status"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/DatasetStatus"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/status"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/version/id/{versionsetId}:
+    get:
+      operationId: "get_dataset_version_from_id"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "versionsetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/DatasetVersion"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/version/id/{versionsetId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    delete:
+      operationId: "delete_dataset_version__from_id"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "versionsetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/version/id/{versionsetId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}:
+    get:
+      operationId: "get_all_datasets"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListDatasets"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions:
+    get:
+      operationId: "get_dataset_versions"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListDatasetVersions"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions/version/{version}/{timePeriod}:
+    get:
+      operationId: "get_dataset_version"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "timePeriod"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/DatasetVersion"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions/version/{version}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions/{versionsetId}/input:
+    get:
+      operationId: "get_dataset_version_file"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "versionsetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions/{versionsetId}/input"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions/{versionsetId}/input/{offset}/{limit}:
+    get:
+      operationId: "get_dataset_version_file_pagination"
+      parameters:
+        - name: "limit"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "versionsetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "offset"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListRecords"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/versions/{versionsetId}/input/{offset}/{limit}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+
+
+  /webrobot/api/datasets/{projectId}/{botId}:
+    get:
+      operationId: "add_dataset"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "dataset"
+          required: true
+          schema:
+            $ref: "#/definitions/Dataset"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Dataset"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/datasets/{projectId}/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}:
+    post:
+      operationId: "create_job"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Job"
+          required: true
+          schema:
+            $ref: "#/definitions/Job"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Job"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    get:
+      operationId: "get_all_jobs"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListJobs"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}:
+    get:
+      operationId: "get_job"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Job"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    delete:
+      operationId: "delete_job"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /{projectId}/{botId}/{datasetId}/{jobId}/output/tasks/{version}:
+    get:
+      operationId: "get_dataset_version_of_tasks"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListDatasetVersions"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/output"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/output/task/{version}/{timePeriod}:
+    get:
+      operationId: "get_output_file"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "timePeriod"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/output"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/output/size/task/{version}/{timePeriod}:
+    get:
+      operationId: "get_output_size"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "timePeriod"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/DatasetSize"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/output/size"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/output/{offset}/{limit}/task/{version}/{timePeriod}:
+    get:
+      operationId: "get_output_file_pagination"
+      parameters:
+        - name: "limit"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "offset"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "timePeriod"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListRecords"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/output/{offset}/{limit}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/start:
+    get:
+      operationId: "start_job"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Job"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/start"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/status/{id}:
+    get:
+      operationId: "get_status_job"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/StatusJob"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/dataset/{projectId}/{botId}/{datasetId}/{jobId}/status/{id}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/stop/{id}:
+    get:
+      operationId: "stop_job"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "jobId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "datasetId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Job"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/job/{projectId}/{botId}/{datasetId}/{jobId}/stop/{id}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/projects:
+    get:
+      operationId: "get_all_projects"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListProjects"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/projects"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    post:
+      operationId: "create_project"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "Project"
+          required: true
+          schema:
+            $ref: "#/definitions/Project"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Project"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/projects"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/projects/id/{projectId}:
+    get:
+      operationId: "get_project"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Project"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/id/{projectId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    put:
+      operationId: "update_project"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Project"
+          required: true
+          schema:
+            $ref: "#/definitions/Project"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Project"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "PUT"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/projects/id/{projectId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    delete:
+      operationId: "delete_project"
+      parameters:
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/id/{projectId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/projects/{projectName}:
+    get:
+      operationId: "get_project_from_name"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "projectName"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Project"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/projects/{projectName}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectName: "method.request.path.projectName"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/scripts/{projectId}/{botId}:
+    get:
+      operationId: "get_scripts"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ListScripts"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/scripts/{projectId}/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botId: "method.request.path.botId"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    post:
+      operationId: "add_script"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "BotScript"
+          required: true
+          schema:
+            $ref: "#/definitions/BotScript"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/BotScript"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/scripts/{projectId}/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botId: "method.request.path.botId"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    put:
+      operationId: "update_script"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "BotScript"
+          required: true
+          schema:
+            $ref: "#/definitions/BotScript"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/BotScript"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "PUT"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/scripts/{projectId}/{botId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botId: "method.request.path.botId"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/scripts/{projectId}/{botId}/{scriptId}:
+    get:
+      operationId: "get script"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "scriptId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/BotScript"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "GET"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/scripts/{projectId}/{botId}/{scriptId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botId: "method.request.path.botId"
+          integration.request.path.scriptId: "method.request.path.scriptId"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+    delete:
+      operationId: "delete_script"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "scriptId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "DELETE"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/scripts/{projectId}/{botId}/{scriptId}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.botId: "method.request.path.botId"
+          integration.request.path.scriptId: "method.request.path.scriptId"
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+  /webrobot/api/{projectId}/{botId}/upload/{attachmentName}/{length}:
+    post:
+      operationId: "upload_file"
+      consumes:
+        - "multipart/form-data"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "botId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "attachmentName"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "length"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "projectId"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        type: "http_proxy"
+        connectionId: "${stageVariables.VPCLINK}"
+        httpMethod: "POST"
+        uri: "http://${stageVariables.VPCNLB}/webrobot/api/{projectId}/{botId}/upload/{attachmentName}/{length}"
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.projectId: "method.request.path.projectId"
+        passthroughBehavior: "when_no_match"
+        connectionType: "VPC_LINK"
+definitions:
+  PageAttribute:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      value:
+        type: "string"
+      id:
+        type: "string"
+  Page:
+    type: "object"
+    properties:
+      url:
+        type: "string"
+      query:
+        type: "string"
+      apikey:
+        type: "string"
+      projectId:
+        type: "string"
+      botId:
+        type: "string"
+      conceptId:
+        type: "string"
+      createdTime:
+        type: "string"
+      html:
+        type: "string"
+      id:
+        type: "string"
+      attributes:
+        type: "array"
+        items:
+          $ref: "#/definitions/PageAttribute"
+  Concept:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      id:
+        type: "string"
+      apikey:
+        type: "string"
+      projectId:
+        type: "string"
+      boiId:
+        type: "string"
+      createdTime:
+        type: "string"
+      attributes:
+        type: "array"
+        items:
+          $ref: "#/definitions/ConceptAttribute"
+  ConceptAttribute:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      uri:
+        type: "string"
+      label:
+        type: "string"
+      multipleValues:
+        type: "boolean"
+      sparqlQuery:
+        type: "string"
+      regexp:
+        type: "string"
+      projectId:
+        type: "string"
+      botId:
+        type: "string"
+      conceptId:
+        type: "string"
+      resultXPath:
+        type: "string"
+      isRelaxedXpath:
+        type: "boolean"
+      createdTime:
+        type: "string"
+      apikey:
+        type: "string"
+      typeAttribute:
+        type: "string"
+  ListConcepts:
+    type: "object"
+    properties:
+      concepts:
+        type: "array"
+        items:
+          $ref: "#/definitions/Concept"
+  ListPages:
+    type: "object"
+    properties:
+      pages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Page"
+  ListRecords:
+    type: "object"
+    properties:
+      records:
+        type: "array"
+        items:
+          $ref: "#/definitions/DatasetRecord"
+  DatasetField:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      value:
+        type: "string"
+  DatasetRecord:
+    type: "object"
+    properties:
+      fields:
+        type: "array"
+        items:
+          $ref: "#/definitions/DatasetField"
+  DatasetStatus:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+  ListDatasetVersions:
+    type: "object"
+    properties:
+      versions:
+        type: "array"
+        items:
+          $ref: "#/definitions/DatasetVersion"
+  Dataset:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      botId:
+        type: "string"
+      name:
+        type: "string"
+      apiKey:
+        type: "string"
+      projectId:
+        type: "string"
+      headerLine:
+        type: "string"
+      sourcePath:
+        type: "string"
+      comments:
+        type: "string"
+      version:
+        type: "string"
+      status:
+        type: "string"
+      versions:
+        type: "array"
+        items:
+          $ref: "#/definitions/DatasetVersion"
+  Project:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+      createdTime:
+        type: "string"
+      id:
+        type: "string"
+  Bot:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      name:
+        type: "string"
+      botParameters:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            value:
+              type: "string"
+      description:
+        type: "string"
+      createdTime:
+        type: "string"
+      id:
+        type: "string"
+      sparqlService:
+        type: "string"
+      projectId:
+        type: "string"
+  BotScript:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      createdTime:
+        type: "string"
+      id:
+        type: "string"
+      botId:
+        type: "string"
+      type:
+        type: "string"
+      projectId:
+        type: "string"
+  ListProjects:
+    type: "object"
+    properties:
+      projects:
+        type: "array"
+        items:
+          $ref: "#/definitions/Project"
+  Job:
+    type: "object"
+    properties:
+      scheduleInfo:
+        type: "string"
+      isImmediate:
+        type: "boolean"
+      datasetId:
+        type: "string"
+      createdTime:
+        type: "string"
+      id:
+        type: "string"
+      botId:
+        type: "string"
+      error:
+        type: "string"
+      projectId:
+        type: "string"
+      status:
+        type: "string"
+      sparkJobId:
+        type: "string"
+  ListAttributes:
+    type: "object"
+    properties:
+      attributes:
+        type: "array"
+        items:
+          $ref: "#/definitions/PageAttribute"
+  ListBots:
+    type: "object"
+    properties:
+      bots:
+        type: "array"
+        items:
+          $ref: "#/definitions/Bot"
+  ListScripts:
+    type: "object"
+    properties:
+      scripts:
+        type: "array"
+        items:
+          $ref: "#/definitions/BotScript"
+  ListJobs:
+    type: "object"
+    properties:
+      jobs:
+        type: "array"
+        items:
+          $ref: "#/definitions/Job"
+  ListDatasets:
+    type: "object"
+    properties:
+      datasets:
+        type: "array"
+        items:
+          $ref: "#/definitions/Dataset"
+  StatusJob:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+  DatasetSize:
+    type: "object"
+    properties:
+      size:
+        type: "string"
+  AthenaField:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      tipo:
+        type: "string"
+  DatasetVersion:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      timePeriod:
+        type: "string"
+      version:
+        type: "string"
+      status:
+        type: "string"
+      datasetId:
+        type: "string"
+      name:
+        type: "string"
+      apikey:
+        type: "string"
+      projectId:
+        type: "string"
+      botId:
+        type: "string"
+      jobId:
+        type: "string"
+      inputdatabaseName:
+        type: "string"
+      inputtableName:
+        type: "string"
+      outputdatabaseName:
+        type: "string"
+      outputtableName:
+        type: "string"
+      targetPath:
+        type: "string"
+      targetPathOutput:
+        type: "string"
+      inputfields:
+        type: "array"
+        items:
+          $ref: "#/definitions/AthenaField"
+      outputfields:
+        type: "array"
+        items:
+          $ref: "#/definitions/AthenaField"
