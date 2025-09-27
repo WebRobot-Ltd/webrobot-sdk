@@ -6,7 +6,7 @@ import com.amazonaws.client.ClientExecutionParams;
 import com.amazonaws.client.ClientHandler;
 import com.amazonaws.client.ClientHandlerParams;
 import com.amazonaws.opensdk.BaseRequest;
-
+import com.amazonaws.opensdk.protect.client.SdkClientHandler;
 
 @ThreadSafe
 @Immutable
@@ -14,7 +14,7 @@ public class SdkClientHandlerTest extends ClientHandler {
     private final ClientHandler delegateHandler;
 
     public SdkClientHandlerTest(ClientHandlerParams handlerParams) {
-        this.delegateHandler = new ClientHandlerImplTest(handlerParams);
+        this.delegateHandler = new SdkClientHandler(handlerParams);
     }
 
     public <Input, Output> Output execute(ClientExecutionParams<Input, Output> executionParams) {
@@ -22,7 +22,6 @@ public class SdkClientHandlerTest extends ClientHandler {
     }
 
     public void shutdown() {
-
         this.delegateHandler.shutdown();
     }
 
