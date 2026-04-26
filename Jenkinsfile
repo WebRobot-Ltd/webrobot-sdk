@@ -2,6 +2,9 @@
  * WebRobot.Sdk — allineato a rest-api/WebRobotAPIS-new/Jenkinsfile:
  * agent Kubernetes, container maven:3.9.11-amazoncorretto-17, PVC .m2 condiviso,
  * withMaven(globalMavenSettingsConfig) per build/deploy su GitHub Packages.
+ *
+ * Versione Maven (pom ${revision}): ogni run CI usa -Drevision univoca (default 0.3.<BUILD_NUMBER>)
+ * così ogni deploy su GitHub Packages è una nuova coordinata GAV, senza sovrascrivere release precedenti.
  */
 pipeline {
     agent {
@@ -56,6 +59,12 @@ spec:
             defaultValue: false,
             description: 'Deploy del package Maven su GitHub Packages (distributionManagement nel pom)'
         )
+        string(
+            name: 'MAVEN_REVISION',
+            defaultValue: '',
+            trim: true,
+            description: 'Versione Maven completa (es. 0.4.1). Vuoto = auto 0.3.<BUILD_NUMBER> (nuova versione ad ogni build).'
+        )
     }
 
     options {
@@ -71,7 +80,10 @@ spec:
                     def scmVars = checkout scm
                     env.GIT_COMMIT = scmVars.GIT_COMMIT
                     env.GIT_COMMIT_SHORT = scmVars.GIT_COMMIT ? scmVars.GIT_COMMIT.take(8) : 'unknown'
+                    def manualRev = params.MAVEN_REVISION?.trim()
+                    env.MAVEN_REVISION = manualRev ? manualRev : "0.3.${env.BUILD_NUMBER}"
                     echo "Checkout ${env.GITHUB_REPOSITORY} @ ${env.GIT_COMMIT_SHORT}"
+                    echo "Maven -Drevision=${env.MAVEN_REVISION}"
                 }
             }
         }
@@ -95,7 +107,7 @@ spec:
                     script {
                         echo 'Esecuzione test unitari...'
                         withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
-                            sh 'mvn -B test'
+                            sh "mvn -B test -Drevision=${env.MAVEN_REVISION}"
                         }
                         echo 'Test unitari completati'
                     }
@@ -109,7 +121,7 @@ spec:
                     script {
                         echo 'Build WebRobot.Sdk (verify, test saltati come in Jersey API)...'
                         withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
-                            sh 'mvn -U -B clean verify -DskipTests'
+                            sh "mvn -U -B clean verify -DskipTests -Drevision=${env.MAVEN_REVISION}"
                         }
                     }
                 }
@@ -125,7 +137,7 @@ spec:
                     script {
                         echo 'Deploy su GitHub Packages...'
                         withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
-                            sh 'mvn -B deploy -DskipTests'
+                            sh "mvn -B deploy -DskipTests -Drevision=${env.MAVEN_REVISION}"
                         }
                     }
                 }
@@ -135,7 +147,7 @@ spec:
 
     post {
         success {
-            echo "OK — webrobot.eu:org.webrobot.sdk. Deploy: ${params.DEPLOY_TO_MAVEN ? 'sì' : 'no'}."
+            echo "OK — webrobot.eu:org.webrobot.sdk revision ${env.MAVEN_REVISION}. Deploy: ${params.DEPLOY_TO_MAVEN ? 'sì' : 'no'}."
         }
         failure {
             echo 'Build o deploy fallito: log Maven e managed settings (server webrobot-ltd-repository).'
