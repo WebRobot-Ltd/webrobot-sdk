@@ -7,10 +7,12 @@
   Genera il token: https://central.sonatype.com/usertoken
   (documentazione: https://central.sonatype.org/publish/generate-portal-token/ )
 
-  In Jenkins: credenziale «Username with password» → username = valore "User name" del token,
-  password = valore "Password" del token (come mostrato al momento della generazione).
+  In Jenkins: credenziale «Username with password» con ID `sonatype-ossrh` (default del parametro
+  SONATYPE_CREDENTIALS_ID nel Jenkinsfile). Username/password = valori del Portal user token
+  mostrati alla generazione.
 
-  L'id DEVE essere esattamente: ossrh (come in <distributionManagement> del pom).
+  Nel file settings Maven, <server><id> deve essere esattamente ossrh (come in distributionManagement
+  del pom) — non confondere con l’ID della credenziale Jenkins (`sonatype-ossrh`).
 
   NON versionare username/password reali.
   Per locale: sonatype-settings.local.xml (gitignored) o merge in ~/.m2/settings.xml.

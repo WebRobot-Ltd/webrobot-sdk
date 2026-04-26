@@ -5,8 +5,8 @@
  *
  * Versione Maven (pom ${revision}): ogni run CI usa -Drevision univoca (default 0.3.<BUILD_NUMBER>).
  * Il managed settings (MAVEN_SETTINGS_CONFIG) può contenere mirror/proxy senza segreti Sonatype.
- * Per il deploy: credenziali Jenkins «Username with password» il cui ID è il parametro SONATYPE_CREDENTIALS_ID
- * (default sonatype-ossrh). Maven unisce global settings + overlay generato con <server><id>ossrh</id>.
+ * Deploy: credenziale Jenkins «Username with password» — ID in Jenkins: `sonatype-ossrh` (param
+ * SONATYPE_CREDENTIALS_ID, default uguale). Maven: overlay con <server><id>ossrh</id> (deve matchare il pom).
  */
 pipeline {
     agent {
