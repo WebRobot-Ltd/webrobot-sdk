@@ -1136,6 +1136,22 @@ class WebRobotCliSdkClient implements WebRobotCliSdk {
     }
 
     /**
+     * @param get_project_scheduleRequest
+     * @return Result of the get_project_schedule operation returned by the service.
+     */
+    @Override
+    public Get_project_scheduleResult get_project_schedule(Get_project_scheduleRequest get_project_scheduleRequest) {
+        HttpResponseHandler<Get_project_scheduleResult> responseHandler = protocolFactory.createResponseHandler(new JsonOperationMetadata().withPayloadJson(true)
+                .withHasStreamingSuccessResponse(false), new Get_project_scheduleResultJsonUnmarshaller());
+
+        HttpResponseHandler<SdkBaseException> errorResponseHandler = createErrorResponseHandler();
+
+        return clientHandler.execute(new ClientExecutionParams<Get_project_scheduleRequest, Get_project_scheduleResult>()
+                .withMarshaller(new Get_project_scheduleRequestProtocolMarshaller(protocolFactory)).withResponseHandler(responseHandler)
+                .withErrorResponseHandler(errorResponseHandler).withInput(get_project_scheduleRequest));
+    }
+
+    /**
      * @param get_scriptsRequest
      * @return Result of the get_scripts operation returned by the service.
      * @sample WebRobotCliSdk.get_scripts
@@ -1399,6 +1415,22 @@ class WebRobotCliSdkClient implements WebRobotCliSdk {
         return clientHandler.execute(new ClientExecutionParams<Update_projectRequest, Update_projectResult>()
                 .withMarshaller(new Update_projectRequestProtocolMarshaller(protocolFactory)).withResponseHandler(responseHandler)
                 .withErrorResponseHandler(errorResponseHandler).withInput(update_projectRequest));
+    }
+
+    /**
+     * @param set_project_scheduleRequest
+     * @return Result of the set_project_schedule operation returned by the service.
+     */
+    @Override
+    public Set_project_scheduleResult set_project_schedule(Set_project_scheduleRequest set_project_scheduleRequest) {
+        HttpResponseHandler<Set_project_scheduleResult> responseHandler = protocolFactory.createResponseHandler(new JsonOperationMetadata().withPayloadJson(true)
+                .withHasStreamingSuccessResponse(false), new Set_project_scheduleResultJsonUnmarshaller());
+
+        HttpResponseHandler<SdkBaseException> errorResponseHandler = createErrorResponseHandler();
+
+        return clientHandler.execute(new ClientExecutionParams<Set_project_scheduleRequest, Set_project_scheduleResult>()
+                .withMarshaller(new Set_project_scheduleRequestProtocolMarshaller(protocolFactory)).withResponseHandler(responseHandler)
+                .withErrorResponseHandler(errorResponseHandler).withInput(set_project_scheduleRequest));
     }
 
     /**

@@ -524,6 +524,12 @@ public interface WebRobotCliSdk {
     Get_project_from_nameResult get_project_from_name(Get_project_from_nameRequest get_project_from_nameRequest);
 
     /**
+     * @param get_project_scheduleRequest
+     * @return Result of the get_project_schedule operation returned by the service.
+     */
+    Get_project_scheduleResult get_project_schedule(Get_project_scheduleRequest get_project_scheduleRequest);
+
+    /**
      * @param get_scriptsRequest
      * @return Result of the get_scripts operation returned by the service.
      * @sample WebRobotCliSdk.get_scripts
@@ -648,6 +654,12 @@ public interface WebRobotCliSdk {
      *      Documentation</a>
      */
     Update_projectResult update_project(Update_projectRequest update_projectRequest);
+
+    /**
+     * @param set_project_scheduleRequest
+     * @return Result of the set_project_schedule operation returned by the service.
+     */
+    Set_project_scheduleResult set_project_schedule(Set_project_scheduleRequest set_project_scheduleRequest);
 
     /**
      * @param update_scriptRequest

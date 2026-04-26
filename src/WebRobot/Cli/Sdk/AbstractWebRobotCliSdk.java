@@ -299,6 +299,11 @@ public class AbstractWebRobotCliSdk implements WebRobotCliSdk {
     }
 
     @Override
+    public Get_project_scheduleResult get_project_schedule(Get_project_scheduleRequest request) {
+        throw new java.lang.UnsupportedOperationException();
+    }
+
+    @Override
     public Get_scriptsResult get_scripts(Get_scriptsRequest request) {
         throw new java.lang.UnsupportedOperationException();
     }
@@ -365,6 +370,11 @@ public class AbstractWebRobotCliSdk implements WebRobotCliSdk {
 
     @Override
     public Update_projectResult update_project(Update_projectRequest request) {
+        throw new java.lang.UnsupportedOperationException();
+    }
+
+    @Override
+    public Set_project_scheduleResult set_project_schedule(Set_project_scheduleRequest request) {
         throw new java.lang.UnsupportedOperationException();
     }
 

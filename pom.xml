@@ -10,6 +10,8 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Sanitized spec is bundled under src/main/resources/openapi (offline-safe). Refresh: scripts/update-openapi-snapshot.sh -->
+        <openapi.generator.version>6.6.0</openapi.generator.version>
     </properties>
 
     <repositories>
@@ -38,6 +40,63 @@
         </extensions>
 
         <plugins>
+
+            <!-- OpenAPI 3 client from bundled sanitized spec (aligns with Jersey; coexists with legacy WebRobotCliSdk) -->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi.generator.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-jersey-openapi-client</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Bundled snapshot: refresh with scripts/update-openapi-snapshot.sh -->
+                            <skipValidateSpec>true</skipValidateSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/openapi-sanitized.json</inputSpec>
+                            <generatorName>java</generatorName>
+                            <!-- apache-httpclient (HttpClient 5) + Java 8 source level -->
+                            <library>apache-httpclient</library>
+                            <apiPackage>eu.webrobot.openapi.client.api</apiPackage>
+                            <modelPackage>eu.webrobot.openapi.client.model</modelPackage>
+                            <invokerPackage>eu.webrobot.openapi.client</invokerPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <configOptions>
+                                <java8>true</java8>
+                                <dateLibrary>java8</dateLibrary>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <openApiNullable>true</openApiNullable>
+                                <useRuntimeException>true</useRuntimeException>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>add-openapi-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/openapi/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -139,17 +198,58 @@
             <version>1.11.710</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- OpenAPI Generator "java" + native client runtime -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.13.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.13.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+        <!-- OpenAPI "apache-httpclient" template 6.6 uses Apache HttpClient 5 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.13.5</version>
+        </dependency>
     </dependencies>
 
+    <!-- Deploy: stesso schema di rest-api/WebRobotAPIS-new (GitHub Packages). Credenziali in ~/.m2/settings.xml o Jenkins managed file (server id sotto). -->
     <distributionManagement>
-        <snapshotRepository>
-            <id>webrobot-repository-snapshot</id>
-            <url>s3://webrobot-repository/repo/snapshot</url>
-        </snapshotRepository>
         <repository>
-            <id>webrobot-repository</id>
-            <url>s3://webrobot-repository/repo/release</url>
+            <id>webrobot-ltd-repository</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/WebRobot-Ltd/webrobot-sdk</url>
         </repository>
+        <snapshotRepository>
+            <id>webrobot-ltd-repository</id>
+            <name>GitHub Packages Snapshots</name>
+            <url>https://maven.pkg.github.com/WebRobot-Ltd/webrobot-sdk</url>
+        </snapshotRepository>
     </distributionManagement>
 
 
