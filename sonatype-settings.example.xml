@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Esempio per deploy su Maven Central (Sonatype OSSRH / s01).
+  Esempio per deploy su Maven Central (Sonatype: OSSRH Staging API → Central Portal).
+  Username/password: da https://central.sonatype.com/ (user token), non l’host legacy s01.oss.sonatype.org.
   Copia in ~/.m2/settings.xml (merge <servers>) oppure crea un Managed file in Jenkins
   e imposta MAVEN_SETTINGS_CONFIG al suo ID.
 

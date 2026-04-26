@@ -238,17 +238,22 @@
         </dependency>
     </dependencies>
 
-    <!-- Deploy: Maven Central via Sonatype OSS (host s01). Server id = ossrh (vedi sonatype-settings.example.xml). -->
+    <!--
+      Deploy: Central Publisher / fine vita OSSRH su s01.oss.sonatype.org.
+      Vedi https://central.sonatype.org/pages/ossrh-eol/ e API staging compat:
+      https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
+      Credenziali: token utente da https://central.sonatype.com/ (non più solo password OSSRH legacy).
+    -->
     <distributionManagement>
         <repository>
             <id>ossrh</id>
-            <name>Sonatype OSS Staging (Maven Central)</name>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <name>Sonatype OSSRH Staging API (Central Portal)</name>
+            <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
             <id>ossrh</id>
-            <name>Sonatype OSS Snapshots</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+            <name>Maven Central Snapshots (Portal)</name>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
