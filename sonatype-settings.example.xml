@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Esempio per deploy su Maven Central (Sonatype: OSSRH Staging API → Central Portal).
-  Username/password: da https://central.sonatype.com/ (user token), non l’host legacy s01.oss.sonatype.org.
-  Copia in ~/.m2/settings.xml (merge <servers>) oppure crea un Managed file in Jenkins
-  e imposta MAVEN_SETTINGS_CONFIG al suo ID.
+  Deploy: endpoint ossrh-staging-api.central.sonatype.com (vedi pom distributionManagement).
+
+  Autenticazione Maven (Basic su <server id>ossrh): serve un CENTRAL PORTAL USER TOKEN,
+  NON la vecchia password/token OSSRH — altrimenti il deploy risponde 401 Unauthorized.
+  Genera il token: https://central.sonatype.com/usertoken
+  (documentazione: https://central.sonatype.org/publish/generate-portal-token/ )
+
+  In Jenkins: credenziale «Username with password» → username = valore "User name" del token,
+  password = valore "Password" del token (come mostrato al momento della generazione).
 
   L'id DEVE essere esattamente: ossrh (come in <distributionManagement> del pom).
 
   NON versionare username/password reali.
-  Per prova locale senza produzione: copia come sonatype-settings.local.xml (vedi .gitignore) o merge in ~/.m2/settings.xml.
+  Per locale: sonatype-settings.local.xml (gitignored) o merge in ~/.m2/settings.xml.
+
+  Dopo maven-deploy (API "Maven-like"): per far comparire il deployment nel Portal può essere
+  necessario POST /manual/upload/defaultRepository/<namespace> dallo stesso IP — vedi
+  https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
 -->
 <settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
