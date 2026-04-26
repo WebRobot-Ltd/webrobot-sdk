@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Esempio per deploy su Maven Central (Sonatype OSSRH / s01).
+  Copia in ~/.m2/settings.xml (merge <servers>) oppure crea un Managed file in Jenkins
+  e imposta MAVEN_SETTINGS_CONFIG al suo ID.
+
+  L'id DEVE essere esattamente: ossrh (come in <distributionManagement> del pom).
+
+  NON versionare username/password reali.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+  <servers>
+    <server>
+      <id>ossrh</id>
+      <username>SONATYPE_USERNAME</username>
+      <password>SONATYPE_PASSWORD</password>
+    </server>
+  </servers>
+</settings>

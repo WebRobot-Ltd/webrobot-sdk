@@ -1,10 +1,10 @@
 /**
  * WebRobot.Sdk — allineato a rest-api/WebRobotAPIS-new/Jenkinsfile:
  * agent Kubernetes, container maven:3.9.11-amazoncorretto-17, PVC .m2 condiviso,
- * withMaven(globalMavenSettingsConfig) per build/deploy su GitHub Packages.
+ * withMaven(globalMavenSettingsConfig) per build/deploy su Maven Central (Sonatype OSS, host s01).
  *
- * Versione Maven (pom ${revision}): ogni run CI usa -Drevision univoca (default 0.3.<BUILD_NUMBER>)
- * così ogni deploy su GitHub Packages è una nuova coordinata GAV, senza sovrascrivere release precedenti.
+ * Versione Maven (pom ${revision}): ogni run CI usa -Drevision univoca (default 0.3.<BUILD_NUMBER>).
+ * Il managed settings (MAVEN_SETTINGS_CONFIG) deve contenere <server><id>ossrh</id> con credenziali Sonatype (mai in repo).
  */
 pipeline {
     agent {
@@ -57,7 +57,7 @@ spec:
         booleanParam(
             name: 'DEPLOY_TO_MAVEN',
             defaultValue: false,
-            description: 'Deploy del package Maven su GitHub Packages (distributionManagement nel pom)'
+            description: 'Deploy del package Maven su Maven Central / Sonatype OSS (distributionManagement nel pom)'
         )
         string(
             name: 'MAVEN_REVISION',
@@ -128,14 +128,14 @@ spec:
             }
         }
 
-        stage('Deploy to GitHub Packages') {
+        stage('Deploy to Maven Central') {
             when {
                 expression { return params.DEPLOY_TO_MAVEN }
             }
             steps {
                 container('maven') {
                     script {
-                        echo 'Deploy su GitHub Packages...'
+                        echo 'Deploy su Sonatype OSS (Maven Central) — server id ossrh nel managed settings...'
                         withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
                             sh "mvn -B deploy -DskipTests -Drevision=${env.MAVEN_REVISION}"
                         }
@@ -150,7 +150,7 @@ spec:
             echo "OK — webrobot.eu:org.webrobot.sdk revision ${env.MAVEN_REVISION}. Deploy: ${params.DEPLOY_TO_MAVEN ? 'sì' : 'no'}."
         }
         failure {
-            echo 'Build o deploy fallito: log Maven e managed settings (server webrobot-ltd-repository).'
+            echo 'Build o deploy fallito: log Maven, managed settings (server ossrh / Sonatype), firma GPG e requisiti Central (sources/javadoc se richiesti).'
         }
     }
 }

@@ -238,17 +238,17 @@
         </dependency>
     </dependencies>
 
-    <!-- Deploy: stesso schema di rest-api/WebRobotAPIS-new (GitHub Packages). Credenziali in ~/.m2/settings.xml o Jenkins managed file (server id sotto). -->
+    <!-- Deploy: Maven Central via Sonatype OSS (host s01). Server id = ossrh (vedi sonatype-settings.example.xml). -->
     <distributionManagement>
         <repository>
-            <id>webrobot-ltd-repository</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/WebRobot-Ltd/webrobot-sdk</url>
+            <id>ossrh</id>
+            <name>Sonatype OSS Staging (Maven Central)</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>webrobot-ltd-repository</id>
-            <name>GitHub Packages Snapshots</name>
-            <url>https://maven.pkg.github.com/WebRobot-Ltd/webrobot-sdk</url>
+            <id>ossrh</id>
+            <name>Sonatype OSS Snapshots</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
