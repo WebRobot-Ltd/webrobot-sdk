@@ -1,25 +1,47 @@
 /**
- * WebRobot.Sdk — build e deploy Maven su GitHub Packages (stesso modello di
- * rest-api/WebRobotAPIS-new: distributionManagement nel pom + withMaven + settings Jenkins).
- *
- * Il repository GitHub che ospita il codice deve coincidere con l’URL in pom.xml
- * (default WebRobot-Ltd/webrobot-sdk). Visibilità dei package = quella dei GitHub Packages
- * del repo (repo pubblico → consumo tipicamente senza login, salvo policy GitHub).
- * Il deploy è sempre autenticato (PAT nel managed settings Jenkins, server id come in Jersey).
+ * WebRobot.Sdk — allineato a rest-api/WebRobotAPIS-new/Jenkinsfile:
+ * agent Kubernetes, container maven:3.9.11-amazoncorretto-17, PVC .m2 condiviso,
+ * withMaven(globalMavenSettingsConfig) per build/deploy su GitHub Packages.
  */
 pipeline {
-    agent any
-
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '15'))
-        // timestamps() richiede il plugin Timestamper (non sempre disponibile nel DSL declarative).
-        timeout(time: 45, unit: 'MINUTES')
-        disableConcurrentBuilds()
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: cicd
+spec:
+  containers:
+  - name: maven
+    image: maven:3.9.11-amazoncorretto-17
+    command:
+    - sleep
+    args:
+    - 99d
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1000m"
+        ephemeral-storage: "2Gi"
+      limits:
+        memory: "4Gi"
+        cpu: "2000m"
+        ephemeral-storage: "4Gi"
+    volumeMounts:
+    - name: maven-repo
+      mountPath: /root/.m2/repository
+  volumes:
+  - name: maven-repo
+    persistentVolumeClaim:
+      claimName: maven-repo-pvc
+'''
+            defaultContainer 'maven'
+        }
     }
 
     environment {
         GITHUB_REPOSITORY = 'WebRobot-Ltd/webrobot-sdk'
-        // Stesso managed file Maven usato dalla pipeline Jersey API (server github / webrobot-ltd-repository).
         MAVEN_SETTINGS_CONFIG = '603a9990-8a95-4328-84f2-693f1c72212f'
     }
 
@@ -27,13 +49,19 @@ pipeline {
         booleanParam(
             name: 'RUN_TESTS',
             defaultValue: false,
-            description: 'Esegui mvn test (default: solo verify con test saltati)'
+            description: 'Eseguire lo stage Unit Tests (mvn test) prima del build'
         )
         booleanParam(
             name: 'DEPLOY_TO_MAVEN',
             defaultValue: false,
-            description: 'mvn deploy su GitHub Packages (pom distributionManagement)'
+            description: 'Deploy del package Maven su GitHub Packages (distributionManagement nel pom)'
         )
+    }
+
+    options {
+        timeout(time: 45, unit: 'MINUTES')
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '15'))
     }
 
     stages {
@@ -42,21 +70,49 @@ pipeline {
                 checkout scm
                 script {
                     env.GIT_COMMIT_SHORT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-                    echo "Repository: ${env.GITHUB_REPOSITORY} @ ${env.GIT_COMMIT_SHORT}"
+                    echo "Checkout ${env.GITHUB_REPOSITORY} @ ${env.GIT_COMMIT_SHORT}"
                 }
             }
         }
 
-        stage('Build') {
+        stage('Setup Environment') {
             steps {
-                script {
-                    def skipTests = params.RUN_TESTS ? '' : '-DskipTests'
-                    withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
-                        sh "mvn -B clean verify ${skipTests}"
+                container('maven') {
+                    sh 'java -version'
+                    sh 'mvn -version'
+                    sh 'pwd && ls -la'
+                }
+            }
+        }
+
+        stage('Unit Tests') {
+            when {
+                expression { params.RUN_TESTS }
+            }
+            steps {
+                container('maven') {
+                    script {
+                        echo 'Esecuzione test unitari...'
+                        withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
+                            sh 'mvn -B test'
+                        }
+                        echo 'Test unitari completati'
                     }
                 }
             }
-            // No junit in stage post: con withMaven + sandbox alcune Jenkins non risolvono lo step junit qui (WorkflowScript ~61).
+        }
+
+        stage('Build Maven') {
+            steps {
+                container('maven') {
+                    script {
+                        echo 'Build WebRobot.Sdk (verify, test saltati come in Jersey API)...'
+                        withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
+                            sh 'mvn -U -B clean verify -DskipTests'
+                        }
+                    }
+                }
+            }
         }
 
         stage('Deploy to GitHub Packages') {
@@ -64,10 +120,12 @@ pipeline {
                 expression { return params.DEPLOY_TO_MAVEN }
             }
             steps {
-                script {
-                    def skipTests = params.RUN_TESTS ? '' : '-DskipTests'
-                    withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
-                        sh "mvn -B deploy ${skipTests}"
+                container('maven') {
+                    script {
+                        echo 'Deploy su GitHub Packages...'
+                        withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
+                            sh 'mvn -B deploy -DskipTests'
+                        }
                     }
                 }
             }
@@ -76,10 +134,10 @@ pipeline {
 
     post {
         success {
-            echo "OK — webrobot.eu:org.webrobot.sdk (versione dal pom). Deploy: ${params.DEPLOY_TO_MAVEN ? 'sì' : 'no'}."
+            echo "OK — webrobot.eu:org.webrobot.sdk. Deploy: ${params.DEPLOY_TO_MAVEN ? 'sì' : 'no'}."
         }
         failure {
-            echo 'Build o deploy fallito: controllare i log Maven e il managed settings (server id webrobot-ltd-repository).'
+            echo 'Build o deploy fallito: log Maven e managed settings (server webrobot-ltd-repository).'
         }
     }
 }
