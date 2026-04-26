@@ -12,7 +12,7 @@ pipeline {
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '15'))
-        timestamps()
+        // timestamps() richiede il plugin Timestamper (non sempre disponibile nel DSL declarative).
         timeout(time: 45, unit: 'MINUTES')
         disableConcurrentBuilds()
     }
