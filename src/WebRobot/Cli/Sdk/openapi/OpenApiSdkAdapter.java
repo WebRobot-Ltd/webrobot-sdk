@@ -4,7 +4,7 @@ import eu.webrobot.openapi.client.ApiClient;
 import eu.webrobot.openapi.client.api.DefaultApi;
 
 /**
- * Facade for the OpenAPI-generated client (Jersey-aligned). Legacy calls remain on {@link WebRobot.Cli.Sdk.WebRobotCliSdk}.
+ * Facade for the OpenAPI-generated client (Jersey-aligned REST API).
  * <p>
  * Base URL defaults to production {@code https://api.webrobot.eu}.
  */
