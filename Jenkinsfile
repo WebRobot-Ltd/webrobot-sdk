@@ -4,7 +4,9 @@
  * withMaven(globalMavenSettingsConfig) per build/deploy su Maven Central (Sonatype OSS, host s01).
  *
  * Versione Maven (pom ${revision}): ogni run CI usa -Drevision univoca (default 0.3.<BUILD_NUMBER>).
- * Il managed settings (MAVEN_SETTINGS_CONFIG) deve contenere <server><id>ossrh</id> con credenziali Sonatype (mai in repo).
+ * Il managed settings (MAVEN_SETTINGS_CONFIG) può contenere mirror/proxy senza segreti Sonatype.
+ * Per il deploy: credenziali Jenkins «Username with password» il cui ID è il parametro SONATYPE_CREDENTIALS_ID
+ * (default sonatype-ossrh). Maven unisce global settings + overlay generato con <server><id>ossrh</id>.
  */
 pipeline {
     agent {
@@ -64,6 +66,12 @@ spec:
             defaultValue: '',
             trim: true,
             description: 'Versione Maven completa (es. 0.4.1). Vuoto = auto 0.3.<BUILD_NUMBER> (nuova versione ad ogni build).'
+        )
+        string(
+            name: 'SONATYPE_CREDENTIALS_ID',
+            defaultValue: 'sonatype-ossrh',
+            trim: true,
+            description: 'Jenkins credential ID (Username with password) per Sonatype OSS — server Maven id ossrh'
         )
     }
 
@@ -135,9 +143,34 @@ spec:
             steps {
                 container('maven') {
                     script {
-                        echo 'Deploy su Sonatype OSS (Maven Central) — server id ossrh nel managed settings...'
-                        withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG) {
-                            sh "mvn -B deploy -DskipTests -Drevision=${env.MAVEN_REVISION}"
+                        echo "Deploy Sonatype OSS: overlay ossrh da credential ${params.SONATYPE_CREDENTIALS_ID} + managed global ${env.MAVEN_SETTINGS_CONFIG}"
+                        def esc = { String s ->
+                            if (s == null) {
+                                return ''
+                            }
+                            return s.replace('&', '&amp;')
+                                .replace('<', '&lt;')
+                                .replace('>', '&gt;')
+                                .replace('"', '&quot;')
+                                .replace('\'', '&apos;')
+                        }
+                        withCredentials([usernamePassword(credentialsId: params.SONATYPE_CREDENTIALS_ID, usernameVariable: 'OSSRH_USER', passwordVariable: 'OSSRH_PASS')]) {
+                            writeFile file: 'jenkins-ossrh-overlay-settings.xml', text: """<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+  <servers>
+    <server>
+      <id>ossrh</id>
+      <username>${esc(env.OSSRH_USER)}</username>
+      <password>${esc(env.OSSRH_PASS)}</password>
+    </server>
+  </servers>
+</settings>
+"""
+                            withMaven(globalMavenSettingsConfig: env.MAVEN_SETTINGS_CONFIG, mavenSettingsFile: "${env.WORKSPACE}/jenkins-ossrh-overlay-settings.xml") {
+                                sh "mvn -B deploy -DskipTests -Drevision=${env.MAVEN_REVISION}"
+                            }
                         }
                     }
                 }
@@ -150,7 +183,7 @@ spec:
             echo "OK — webrobot.eu:org.webrobot.sdk revision ${env.MAVEN_REVISION}. Deploy: ${params.DEPLOY_TO_MAVEN ? 'sì' : 'no'}."
         }
         failure {
-            echo 'Build o deploy fallito: log Maven, managed settings (server ossrh / Sonatype), firma GPG e requisiti Central (sources/javadoc se richiesti).'
+            echo 'Build o deploy fallito: log Maven, credential SONATYPE_CREDENTIALS_ID, managed global settings, firma GPG e requisiti Central (sources/javadoc se richiesti).'
         }
     }
 }

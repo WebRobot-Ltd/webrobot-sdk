@@ -7,6 +7,7 @@
   L'id DEVE essere esattamente: ossrh (come in <distributionManagement> del pom).
 
   NON versionare username/password reali.
+  Per prova locale senza produzione: copia come sonatype-settings.local.xml (vedi .gitignore) o merge in ~/.m2/settings.xml.
 -->
 <settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
