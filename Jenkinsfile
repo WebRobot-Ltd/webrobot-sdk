@@ -56,11 +56,7 @@ pipeline {
                     }
                 }
             }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
-                }
-            }
+            // No junit in stage post: con withMaven + sandbox alcune Jenkins non risolvono lo step junit qui (WorkflowScript ~61).
         }
 
         stage('Deploy to GitHub Packages') {
