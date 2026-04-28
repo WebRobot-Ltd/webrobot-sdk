@@ -242,7 +242,7 @@
       Deploy: Central Publisher / fine vita OSSRH su s01.oss.sonatype.org.
       Vedi https://central.sonatype.org/pages/ossrh-eol/ e API staging compat:
       https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
-      Credenziali: token utente da https://central.sonatype.com/ (non più solo password OSSRH legacy).
+      Credenziali: Central Portal User Token (https://central.sonatype.com/usertoken). Token/credenziali OSSRH legacy → 401 su questo endpoint (vedi doc Sonatype «Authentication»).
     -->
     <distributionManagement>
         <repository>
