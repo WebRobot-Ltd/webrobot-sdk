@@ -1,0 +1,8 @@
+jdk:
+  - openjdk17
+
+# JitPack runs `mvn install` from the repo root. The CI-friendly version pattern
+# `${revision}` in pom.xml is overridden via -Drevision=<tag> so the artifact
+# version matches the git tag (e.g. tag v0.3.13 → version 0.3.13).
+install:
+  - mvn -B -ntp -DskipTests -Drevision=${VERSION#v} install
