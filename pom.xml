@@ -88,7 +88,8 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.5.0</version>
+                <!-- 3.5.0+ requires Maven 3.6.3+; JitPack runs Maven 3.5.x by default. -->
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>add-openapi-generated-sources</id>
