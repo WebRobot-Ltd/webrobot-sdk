@@ -37,4 +37,16 @@ public class OpenApiSdkAdapter {
         apiClient.addDefaultHeader(headerName, apiKey);
         return this;
     }
+
+    /**
+     * Generic, endpoint-agnostic JSON client. Use this to call any REST endpoint
+     * without a typed wrapper — the CLI host wires this into its public CLI
+     * plugin SDK so partner plugins can call any platform endpoint without
+     * pulling proprietary types.
+     *
+     * @since 0.3.13
+     */
+    public GenericClient generic() {
+        return new GenericClientImpl(this.apiClient);
+    }
 }
